@@ -4,7 +4,7 @@ const router = express.Router();
 /* GET home page. */
 router.get("/", function (req, res) {
   res.json({
-    message: "Welcome to the API",
+    message: "Selamat datang!",
     app: process.env.APP_NAME,
     version: process.env.APP_VERSION,
   });

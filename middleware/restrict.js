@@ -22,7 +22,7 @@ const restrict = {
     ) {
       res.status(401).json({
         status: "error",
-        message: "Authorization header invalid",
+        message: "Kode akses tidak valid",
       });
     } else {
       // Get the token from the request
@@ -31,7 +31,7 @@ const restrict = {
       // Verify the token
       jwt.verify(token, getKey, {}, function (err, decoded) {
         // If token valid, continue
-        if (!err && decoded.exp * 1000 > Date.now()) {
+        if (!err) {
           // Attach the user to the request
           req.user = decoded;
           next();
@@ -39,7 +39,7 @@ const restrict = {
           // If token invalid, send error
           res.status(401).json({
             status: "error",
-            message: "Invalid token",
+            message: "Kode akses tidak valid",
           });
         }
       });

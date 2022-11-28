@@ -10,23 +10,27 @@ router.post("/", async function (req, res) {
     if (!user) {
       // Create a new user
       const newUser = new User({
-        name: payload.name,
-        email: payload.email,
-        picture: payload.picture,
+        name: req.user.name,
+        email: req.user.email,
+        picture: req.user.picture,
       });
       // Save the new user to the database
       await newUser.save();
       // Send the user data to the client
       res.json(newUser);
     } else {
+      // Update the user's data
+      user.name = req.user.name;
+      user.picture = req.user.picture;
+      await user.save();
       // Send the user data to the client
       res.json(user);
     }
   } catch (err) {
-    // If the token is invalid, send an error
-    res.status(401).json({
+    // If there is an error, send it to the client
+    res.status(500).json({
       status: "error",
-      message: "Invalid token",
+      message: "Terjadi kesalahan pada server",
     });
   }
 });
