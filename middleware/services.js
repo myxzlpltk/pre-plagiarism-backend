@@ -5,8 +5,8 @@ const services = {
   minio: (req, res, next) => {
     // Create a minio client
     req.app.locals.minio = new Minio.Client({
-      endPoint: "localhost",
-      port: 9000,
+      endPoint: process.env.MINIO_HOST,
+      port: parseInt(process.env.MINIO_PORT),
       useSSL: false,
       accessKey: process.env.MINIO_ACCESS_KEY,
       secretKey: process.env.MINIO_SECRET_KEY,
@@ -16,8 +16,10 @@ const services = {
   redis: async (req, res, next) => {
     // Create a redis client
     req.app.locals.redis = redis.createClient({
-      host: "localhost",
-      port: 6379,
+      socket: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT,
+      }
     });
     await req.app.locals.redis.connect();
     next();

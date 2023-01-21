@@ -3,8 +3,12 @@ const User = require("../models/user");
 const redis = require("redis");
 
 const subscriber = async () => {
-  const client = redis.createClient();
-  const subscriber = client.duplicate();
+  const subscriber = redis.createClient({
+    socket: {
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
+    }
+  });
   await subscriber.connect();
   await subscriber.subscribe("result", async (message) => {
     // Parse message
