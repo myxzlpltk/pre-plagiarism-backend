@@ -145,18 +145,18 @@ def compute(pdfname):
                                 'font': span['font'],
                                 'char': char['c'],
                                 'rect': {
-                                    'x0': char['bbox'][0],
-                                    'y0': char['bbox'][1],
-                                    'x1': char['bbox'][2],
-                                    'y1': char['bbox'][3]
+                                    'x1': char['bbox'][0],
+                                    'y1': char['bbox'][1],
+                                    'x2': char['bbox'][2],
+                                    'y2': char['bbox'][3]
                                 }
                             })
 
         if len(items) > 0:
             data['pages'].append({
                 'page': page.number,
-                'page_width': page_width,
-                'page_height': page_height,
+                'width': page_width,
+                'height': page_height,
                 'items': items
             })
 
