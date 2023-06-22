@@ -4,7 +4,6 @@ const { randomUUID } = require("crypto");
 const { db, storage } = require("../services");
 const multer = require("multer");
 const { FieldValue } = require("@google-cloud/firestore");
-const { doc } = require("prettier");
 
 // Configure multer
 const upload = multer({
@@ -84,7 +83,7 @@ router.post("/", upload.single('file'), async function (req, res) {
       filename: filename,
       originalFilename: req.file.originalname,
       status: "processing",
-      result: {},
+      result: { method2: null, method5: null },
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
     };
