@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { randomUUID } = require("crypto");
-const { db, storage } = require("../services");
+const { db, storage, pubsub } = require("../services");
 const multer = require("multer");
 const { FieldValue } = require("@google-cloud/firestore");
 
@@ -96,7 +96,13 @@ router.post("/", upload.single('file'), async function (req, res) {
     // });
 
     // Publish to pubsub
-    // req.app.locals.redis.publish("documents", filename);
+    pubsub.topic(process.env.TOPIC_ID).publishMessage({
+      data: Buffer.from(JSON.stringify({
+        id: doc.id,
+        email: req.user.email,
+        filename: filename,
+      }))
+    })
 
     // Send response
     document.id = doc.id;
