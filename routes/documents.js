@@ -47,7 +47,6 @@ router.get("/", async function (req, res) {
     data.id = doc.id;
     data.createdAt = data.createdAt.toDate();
     data.updatedAt = data.updatedAt.toDate();
-    data.result = undefined;
 
     // Push document
     documents.push(data);
@@ -83,11 +82,11 @@ router.post("/", upload.single('file'), async function (req, res) {
       filename: filename,
       originalFilename: req.file.originalname,
       status: "processing",
-      result: { method2: null, method5: null },
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
     };
     const doc = await db.collection(`users/${req.user.email}/documents`).add(document);
+    await db.collection(`users/${req.user.email}/result`).doc(doc.id).set({ method2: null, method5: null })
 
     // Set user to not idle
     // await userRef.update({
@@ -125,11 +124,19 @@ router.get("/:id", async function (req, res) {
   const documentRef = db.collection(`users/${req.user.email}/documents`).doc(req.params.id);
   const documentSnapshot = await documentRef.get();
 
-  if (documentSnapshot.exists) {
+  // Get result
+  const resultRef = db.collection(`users/${req.user.email}/result`).doc(req.params.id);
+  const resultSnapshot = await resultRef.get();
+
+  if (documentSnapshot.exists && resultSnapshot.exists) {
     const document = documentSnapshot.data();
+    const result = resultSnapshot.data();
+
+    // Update documents
     document.id = documentSnapshot.id;
     document.createdAt = new Date();
     document.updatedAt = new Date();
+    document.result = result
 
     // Generate public link
     const [url] = await storage.bucket(process.env.BUCKET_NAME)
