@@ -148,3 +148,6 @@ dist
 
 # Service account
 service-account.json
+
+# Dockerfile
+Dockerfile-local

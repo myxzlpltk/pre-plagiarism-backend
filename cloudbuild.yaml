@@ -1,0 +1,10 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - 'build'
+      - '-t'
+      - 'us-east1-docker.pkg.dev/siberpunk/backend/backend-service'
+      - '.'
+
+images:
+  - us-east1-docker.pkg.dev/siberpunk/backend/backend-service
