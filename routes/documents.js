@@ -89,10 +89,10 @@ router.post("/", upload.single('file'), async function (req, res) {
     await db.collection(`users/${req.user.email}/result`).doc(doc.id).set({ method2: null, method5: null })
 
     // Set user to not idle
-    // await userRef.update({
-    //   idle: false,
-    //   jobCreatedAt: FieldValue.serverTimestamp(),
-    // });
+    await userRef.update({
+      idle: false,
+      jobCreatedAt: FieldValue.serverTimestamp(),
+    });
 
     // Publish to pubsub
     pubsub.topic(process.env.TOPIC_ID).publishMessage({
